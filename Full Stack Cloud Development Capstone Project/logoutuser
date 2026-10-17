@@ -1,4 +1,4 @@
-﻿curl -X GET http://127.0.0.1:8000/djangoapp/logout_json \
-  -H "Content-Type: application/json"
+﻿curl -X GET http://127.0.0.1:8000/djangoapp/logout/ `
+  -H "Accept: application/json"
 
 {"userName": ""}

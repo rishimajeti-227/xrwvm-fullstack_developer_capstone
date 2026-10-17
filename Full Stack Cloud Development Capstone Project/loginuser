@@ -1,6 +1,6 @@
-﻿curl -X POST http://127.0.0.1:8000/djangoapp/login_json \
-  -H "Content-Type: application/json" \
-  -H "X-CSRFToken: 0Wt7G3XQRVJv4oYDXkSdpzWm1EuQW1vH" \
+﻿curl -X POST http://127.0.0.1:8000/djangoapp/login/ `
+  -H "Content-Type: application/json" `
+  -H "X-CSRFToken: ah53pcL6syd2avMOKI6C8eeWTIMFmTI1" `
   -d '{"userName":"john","password":"John1234!"}'
 
 {"userName": "john", "status": "Authenticated"}
