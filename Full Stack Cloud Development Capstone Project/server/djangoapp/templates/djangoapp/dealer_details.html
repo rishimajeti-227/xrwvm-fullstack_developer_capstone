@@ -2,17 +2,97 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    {% load static %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>{{ dealer.full_name }} – Reviews</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background: #f8f9fa; font-family: 'Segoe UI', sans-serif; }
+        .dealer-hero { background: linear-gradient(135deg, #0f3460, #16213e); color: white; padding: 50px 0; }
+        .review-card { border: none; border-left: 5px solid #0f3460; box-shadow: 0 2px 8px rgba(0,0,0,.08); margin-bottom: 20px; border-radius: 8px; }
+        .sentiment-positive { color: #28a745; font-weight: bold; }
+        .sentiment-negative { color: #dc3545; font-weight: bold; }
+        .sentiment-neutral { color: #6c757d; font-weight: bold; }
+        footer { background: #1a1a2e; color: #aaa; padding: 20px 0; text-align: center; margin-top: 60px; }
+    </style>
 </head>
+<body>
 
-    <body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/djangoapp/">🚗 Best Cars</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/djangoapp/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/djangoapp/about/">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="/djangoapp/contact/">Contact</a></li>
+        </ul>
+        {% if user.is_authenticated %}
+        <span class="navbar-text text-warning mr-3">👤 {{ user.username }}</span>
+        <a class="btn btn-outline-light btn-sm" href="/djangoapp/logout/">Logout</a>
+        {% endif %}
+    </div>
+</nav>
 
-    <!--Add a nav bar here -->
+<!-- Dealer Hero -->
+<div class="dealer-hero">
+    <div class="container">
+        {% if dealer %}
+        <h1>{{ dealer.full_name }}</h1>
+        <p class="lead">📍 {{ dealer.address }}, {{ dealer.city }}, {{ dealer.st }} {{ dealer.zip }}</p>
+        {% if user.is_authenticated %}
+        <a href="{% url 'djangoapp:add_review' dealer_id %}" class="btn btn-warning mt-2">
+            ✏️ Write a Review
+        </a>
+        {% endif %}
+        {% else %}
+        <h1>Dealer #{{ dealer_id }}</h1>
+        {% endif %}
+    </div>
+</div>
 
-    <!-- Add reviews as cards -->
+<!-- Reviews -->
+<div class="container mt-4">
+    <h3 class="mb-4">Customer Reviews
+        <span class="badge badge-secondary">{{ reviews|length }}</span>
+    </h3>
 
-    </body>
+    {% for review in reviews %}
+    <div class="card review-card">
+        <div class="card-body">
+            <div class="d-flex justify-content-between">
+                <h5 class="card-title">{{ review.name }}</h5>
+                <span class="sentiment-{{ review.sentiment }}">
+                    {% if review.sentiment == 'positive' %}😊 Positive
+                    {% elif review.sentiment == 'negative' %}😞 Negative
+                    {% else %}😐 Neutral{% endif %}
+                </span>
+            </div>
+            <p class="card-text">"{{ review.review }}"</p>
+            {% if review.purchase %}
+            <small class="text-muted">
+                ✅ Purchased: {{ review.car_year }} {{ review.car_make }} {{ review.car_model }}
+                on {{ review.purchase_date }}
+            </small>
+            {% else %}
+            <small class="text-muted">ℹ️ Did not purchase</small>
+            {% endif %}
+        </div>
+    </div>
+    {% empty %}
+    <div class="alert alert-info">No reviews yet for this dealer. Be the first to review!</div>
+    {% endfor %}
 
+    {% if not user.is_authenticated %}
+    <div class="alert alert-warning mt-3">
+        <a href="/djangoapp/">Login</a> to post a review for this dealer.
+    </div>
+    {% endif %}
+
+    <a href="/djangoapp/" class="btn btn-secondary mt-3">← Back to All Dealers</a>
+</div>
+
+<footer>
+    <p>© 2024 Best Cars Dealership — IBM Full Stack Capstone Project</p>
+</footer>
+
+</body>
 </html>

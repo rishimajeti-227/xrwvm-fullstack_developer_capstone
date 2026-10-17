@@ -1,11 +1,80 @@
-# IBM Full Stack Software Developer Professional Certificate (15 course series)
+# IBM Full Stack Cloud Development Capstone Project
 
-Prepare for a career in the high-growth field of software development. In this program, you’ll learn in-demand skills and tools for front-end, back-end, and cloud native application development to get job-ready in less than 4 months.
+## Project Name: Best Cars Dealership
 
-Full stack refers to the end-to-end computer system application, including the front end and back end coding. Cloud native development refers to developing a program designed to work on cloud architecture. The flexibility and adaptability that full stack and cloud native developers provide make them highly sought after in this digital world. You'll also have the option to learn how generative AI tools and techniques are used in software development.
+A full-stack web application built with **Django** (Python) and **React** as part of the IBM Full Stack Software Developer Professional Certificate capstone.
 
-You’ll  learn how to build, deploy, test, run, and manage full stack cloud native applications. Technologies covered includes Cloud foundations, GitHub, Node.js, React, CI/CD, Containers, Docker, Kubernetes, OpenShift, Istio, Databases, NoSQL, Django ORM, Bootstrap, Application Security, Microservices, Serverless computing, and more. 
+## Project Overview
 
-After completing the program you will have developed several applications using front-end and back-end technologies and deployed them on a cloud platform using Cloud Native methodologies. You will publish these projects through your GitHub repository to share your portfolio with your peers and prospective employers.
+Best Cars Dealership is an online platform where users can:
+- Browse car dealerships across the United States
+- Filter dealerships by state
+- View detailed dealer information and customer reviews
+- Post reviews for dealerships (after logging in)
+- Register and log in with user accounts
 
-This program is ACE® and FIBAA recommended—when you complete, you can earn up to 18 college credits and 6 ECTS credits.
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Backend | Django 4.2, Python 3.11 |
+| Frontend | HTML5, Bootstrap 4, Django Templates |
+| Database | SQLite (development), PostgreSQL (production) |
+| APIs | Django REST views (dealer/review data from JSON) |
+| CI/CD | GitHub Actions |
+| Deployment | IBM Cloud / Render |
+| Sentiment Analysis | Rule-based NLP |
+
+## Project Structure
+
+```
+server/
+├── djangobackend/      # Django project settings
+├── djangoapp/          # Main application
+│   ├── models.py       # CarMake, CarModel, CarDealer, DealerReview
+│   ├── views.py        # All view functions + JSON API endpoints
+│   ├── restapis.py     # Data access layer
+│   ├── urls.py         # URL routing
+│   └── templates/      # HTML templates
+cloudant/
+└── data/               # JSON data files (dealerships, reviews)
+.github/
+└── workflows/          # GitHub Actions CI/CD
+```
+
+## Key Features
+
+- **Dynamic dealer listings** with state-based filtering
+- **Dealer reviews** with sentiment analysis (positive/negative/neutral)
+- **User authentication** — register, login, logout
+- **Admin panel** — manage CarMake and CarModel entries
+- **JSON API endpoints** — `/djangoapp/api/dealers/`, `/djangoapp/api/reviews/dealer/<id>/`
+- **CI/CD pipeline** via GitHub Actions (lint + test on every push)
+
+## Setup & Run Locally
+
+```bash
+cd server
+pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
+
+Visit: http://127.0.0.1:8000/djangoapp/
+
+## API Endpoints
+
+| Endpoint | Description |
+|----------|-------------|
+| `GET /djangoapp/api/dealers/` | All dealers |
+| `GET /djangoapp/api/dealers/?state=KS` | Dealers by state |
+| `GET /djangoapp/api/dealers/<id>/` | Dealer by ID |
+| `GET /djangoapp/api/reviews/dealer/<id>/` | Reviews for a dealer |
+| `GET /djangoapp/api/carmakes/` | All car makes and models |
+| `GET /djangoapp/api/sentiment/?text=Fantastic+services` | Sentiment analysis |
+
+## Author
+
+IBM Full Stack Software Developer Capstone Project  
+© 2024 Best Cars Dealership

@@ -2,15 +2,101 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    {% load static %}
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
-
+    <title>Post Review – Best Cars Dealership</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { background: #f0f2f5; font-family: 'Segoe UI', sans-serif; }
+        .review-card { max-width: 640px; margin: 50px auto; background: white; border-radius: 16px; box-shadow: 0 8px 32px rgba(0,0,0,.12); padding: 40px; }
+        .review-card h2 { color: #0f3460; font-weight: 700; }
+    </style>
 </head>
-    <body>
-    <!--Add review form here -->
-    </body>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/djangoapp/">🚗 Best Cars</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/djangoapp/">Home</a></li>
+        </ul>
+        {% if user.is_authenticated %}
+        <span class="navbar-text text-warning mr-3">👤 {{ user.username }}</span>
+        <a class="btn btn-outline-light btn-sm" href="/djangoapp/logout/">Logout</a>
+        {% endif %}
+    </div>
+</nav>
+
+<div class="review-card">
+    <h2 class="mb-1">✏️ Post a Review</h2>
+    {% if dealer %}
+    <p class="text-muted mb-4">for <strong>{{ dealer.full_name }}</strong></p>
+    {% else %}
+    <p class="text-muted mb-4">for Dealer #{{ dealer_id }}</p>
+    {% endif %}
+
+    <form method="post" action="{% url 'djangoapp:add_review' dealer_id %}">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label><strong>Your Review</strong></label>
+            <textarea class="form-control" name="content" rows="4"
+                      placeholder="Share your experience with this dealership..." required></textarea>
+        </div>
+
+        <div class="form-group form-check">
+            <input type="checkbox" class="form-check-input" id="purchasedCar" name="purchasedCar">
+            <label class="form-check-label" for="purchasedCar">I purchased a car from this dealership</label>
+        </div>
+
+        <div class="form-group">
+            <label><strong>Purchase Date</strong></label>
+            <input type="date" class="form-control" name="purchaseDate">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label><strong>Car Make</strong></label>
+                <select class="form-control" name="car_make">
+                    <option value="">-- Select --</option>
+                    {% for make in car_makes %}
+                    <option value="{{ make.name }}">{{ make.name }}</option>
+                    {% empty %}
+                    <option value="Toyota">Toyota</option>
+                    <option value="Honda">Honda</option>
+                    <option value="Ford">Ford</option>
+                    <option value="BMW">BMW</option>
+                    <option value="Chevrolet">Chevrolet</option>
+                    <option value="Audi">Audi</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group col-md-4">
+                <label><strong>Car Model</strong></label>
+                <input type="text" class="form-control" name="car_model" placeholder="e.g. Camry">
+            </div>
+            <div class="form-group col-md-4">
+                <label><strong>Car Year</strong></label>
+                <select class="form-control" name="car_year">
+                    <option value="2024">2024</option>
+                    <option value="2023">2023</option>
+                    <option value="2022">2022</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+                    <option value="2010">2010</option>
+                </select>
+            </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block mt-2">Submit Review</button>
+        <a href="{% url 'djangoapp:dealer_details' dealer_id %}" class="btn btn-secondary btn-block mt-2">Cancel</a>
+    </form>
+</div>
+
+</body>
 </html>

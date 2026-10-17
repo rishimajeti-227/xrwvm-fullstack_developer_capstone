@@ -1,0 +1,18 @@
+﻿Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+October 17, 2026 - 22:04:25
+Django version 4.2.7, using settings 'djangobackend.settings'
+Starting development server at http://127.0.0.1:8000/
+Quit the server with CTRL-BREAK.
+
+[17/Oct/2026 22:04:41] "GET /djangoapp/ HTTP/1.1" 200 43888
+[17/Oct/2026 22:05:07] "POST /djangoapp/login/ HTTP/1.1" 302 0
+[17/Oct/2026 22:05:07] "GET /djangoapp/ HTTP/1.1" 200 52399
+[17/Oct/2026 22:05:39] "GET /djangoapp/api/dealers/ HTTP/1.1" 200 9570
+[17/Oct/2026 22:05:39] "GET /djangoapp/api/dealers/15/ HTTP/1.1" 200 206
+[17/Oct/2026 22:05:39] "GET /djangoapp/api/dealers/?state=KS HTTP/1.1" 200 200
+[17/Oct/2026 22:05:39] "GET /djangoapp/api/reviews/dealer/15/ HTTP/1.1" 200 243
+[17/Oct/2026 22:05:39] "GET /djangoapp/api/carmakes/ HTTP/1.1" 200 1505
+[17/Oct/2026 22:05:39] "GET /djangoapp/api/sentiment/?text=Fantastic+services HTTP/1.1" 200 55

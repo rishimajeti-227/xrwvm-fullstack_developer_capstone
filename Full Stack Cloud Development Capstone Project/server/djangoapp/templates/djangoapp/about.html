@@ -1,16 +1,132 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <title>About Us</title>
+    <meta charset="UTF-8">
+    <title>About Us – Best Cars Dealership</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; }
+        .hero-about { background: linear-gradient(135deg, #0f3460, #16213e); color: white; padding: 60px 0; text-align: center; }
+        .team-card { border: none; box-shadow: 0 4px 16px rgba(0,0,0,.1); border-radius: 12px; transition: transform .2s; }
+        .team-card:hover { transform: translateY(-6px); }
+        .team-img { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #0f3460; }
+        .role-badge { background: #0f3460; color: white; font-size: .8rem; padding: 3px 10px; border-radius: 20px; }
+        footer { background: #1a1a2e; color: #aaa; padding: 20px 0; text-align: center; margin-top: 60px; }
+    </style>
 </head>
+<body>
 
-    <body>
-        <h1>
-        About Us
-        </h1>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/djangoapp/">🚗 Best Cars</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/djangoapp/">Home</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/djangoapp/about/">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="/djangoapp/contact/">Contact</a></li>
+        </ul>
+    </div>
+</nav>
 
-        <p>Welcome to Best Cars dealership, home to the best cars in North America. We sell domestic and imported cars at reasonable prices.</p>
+<!-- Hero -->
+<div class="hero-about">
+    <div class="container">
+        <h1 class="display-4 font-weight-bold">About Us</h1>
+        <p class="lead mt-3">Welcome to <strong>Best Cars Dealership</strong> — your trusted partner for finding the perfect vehicle across North America.</p>
+    </div>
+</div>
 
-    </body>
+<!-- Company Overview -->
+<div class="container mt-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2 class="font-weight-bold">Our Story</h2>
+            <p class="text-muted mt-3">
+                Founded in 2005, Best Cars Dealership has grown from a single showroom in Chicago to a nationwide network of over 50 trusted dealers.
+                We believe buying a car should be a joyful, transparent experience — no hidden fees, no pressure, just the right car at the right price.
+            </p>
+            <p class="text-muted">
+                We partner with top domestic and international manufacturers to bring you the widest selection of sedans, SUVs, trucks, and electric vehicles.
+                Our certified pre-owned program ensures every used car meets rigorous quality standards.
+            </p>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="https://images.unsplash.com/photo-1504215680853-026ed2a45def?w=500&q=80" class="img-fluid rounded shadow" alt="Car showroom">
+        </div>
+    </div>
+</div>
+
+<!-- Team -->
+<div class="container mt-5">
+    <h2 class="text-center font-weight-bold mb-4">Meet Our Team</h2>
+    <div class="row">
+
+        <div class="col-md-4 mb-4">
+            <div class="card team-card text-center p-4">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" class="team-img mx-auto mb-3" alt="James Carter">
+                <h5 class="font-weight-bold">James Carter</h5>
+                <span class="role-badge">Chief Executive Officer</span>
+                <p class="text-muted mt-3 small">James brings 20+ years of automotive industry experience. He leads Best Cars with a vision of customer-first dealership culture.</p>
+                <a href="mailto:james.carter@bestcars.com" class="text-primary small">james.carter@bestcars.com</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card team-card text-center p-4">
+                <img src="https://randomuser.me/api/portraits/women/44.jpg" class="team-img mx-auto mb-3" alt="Sarah Mitchell">
+                <h5 class="font-weight-bold">Sarah Mitchell</h5>
+                <span class="role-badge">Head of Sales</span>
+                <p class="text-muted mt-3 small">Sarah manages our nationwide sales network and has helped over 10,000 customers drive home their dream cars since joining in 2012.</p>
+                <a href="mailto:sarah.mitchell@bestcars.com" class="text-primary small">sarah.mitchell@bestcars.com</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card team-card text-center p-4">
+                <img src="https://randomuser.me/api/portraits/men/76.jpg" class="team-img mx-auto mb-3" alt="David Nguyen">
+                <h5 class="font-weight-bold">David Nguyen</h5>
+                <span class="role-badge">Lead Software Engineer</span>
+                <p class="text-muted mt-3 small">David architected our online dealership platform using Django, React, and IBM Cloud. He's passionate about making car buying digital and seamless.</p>
+                <a href="mailto:david.nguyen@bestcars.com" class="text-primary small">david.nguyen@bestcars.com</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card team-card text-center p-4">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" class="team-img mx-auto mb-3" alt="Emily Ross">
+                <h5 class="font-weight-bold">Emily Ross</h5>
+                <span class="role-badge">Customer Experience Manager</span>
+                <p class="text-muted mt-3 small">Emily ensures every customer interaction — from browsing to post-purchase — exceeds expectations. She leads our 5-star review program.</p>
+                <a href="mailto:emily.ross@bestcars.com" class="text-primary small">emily.ross@bestcars.com</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card team-card text-center p-4">
+                <img src="https://randomuser.me/api/portraits/men/55.jpg" class="team-img mx-auto mb-3" alt="Marcus Brown">
+                <h5 class="font-weight-bold">Marcus Brown</h5>
+                <span class="role-badge">Fleet & Inventory Director</span>
+                <p class="text-muted mt-3 small">Marcus oversees vehicle acquisition and inventory management across all 50 dealership locations, maintaining a catalog of 2,000+ vehicles.</p>
+                <a href="mailto:marcus.brown@bestcars.com" class="text-primary small">marcus.brown@bestcars.com</a>
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-4">
+            <div class="card team-card text-center p-4">
+                <img src="https://randomuser.me/api/portraits/women/12.jpg" class="team-img mx-auto mb-3" alt="Priya Sharma">
+                <h5 class="font-weight-bold">Priya Sharma</h5>
+                <span class="role-badge">Finance & Loans Advisor</span>
+                <p class="text-muted mt-3 small">Priya helps customers secure the best financing options. She has structured over $50M in auto loans with rates that beat industry averages.</p>
+                <a href="mailto:priya.sharma@bestcars.com" class="text-primary small">priya.sharma@bestcars.com</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<footer>
+    <p>© 2024 Best Cars Dealership — IBM Full Stack Capstone Project</p>
+</footer>
+
+</body>
 </html>

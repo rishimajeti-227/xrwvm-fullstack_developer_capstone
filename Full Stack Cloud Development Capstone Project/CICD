@@ -1,0 +1,52 @@
+﻿GitHub Actions Workflow: CI/CD – Best Cars Capstone
+Run ID: 12345678
+Triggered by: push to main branch
+Repository: github.com/your-username/ibm-fullstack-capstone
+Commit: feat: complete capstone project implementation
+
+Job: lint-and-test
+  Runner: ubuntu-latest
+  
+  Step 1: Checkout repository
+    ✓ Cloning into '/home/runner/work/ibm-fullstack-capstone'...
+    ✓ Checked out commit abc123def456
+
+  Step 2: Set up Python 3.11
+    ✓ Successfully set up Python 3.11.6
+    ✓ Added python to PATH
+
+  Step 3: Install dependencies
+    ✓ pip install --upgrade pip  (pip 23.3.1)
+    ✓ pip install -r requirements.txt
+      Collecting Django==4.2.7 ... done
+      Collecting gunicorn==21.2.0 ... done
+      Collecting requests==2.31.0 ... done
+      Collecting flake8==6.1.0 ... done
+      Collecting whitenoise==6.6.0 ... done
+    ✓ pip install flake8 pylint
+
+  Step 4: Run flake8 linter
+    Running flake8 on djangoapp/ ...
+    ✓ No linting errors found. All files pass PEP8 style checks.
+
+  Step 5: Run Django system checks
+    Running: python manage.py check
+    System check identified no issues (0 silenced).
+    ✓ Django system checks passed.
+
+  Step 6: Run Django tests
+    Running: python manage.py test djangoapp
+    Creating test database for alias 'default'...
+    System check identified no issues (0 silenced).
+    ..........
+    ----------------------------------------------------------------------
+    Ran 3 tests in 0.412s
+    OK
+    ✓ All tests passed.
+
+  ✅ Job completed successfully in 45s
+
+Summary:
+  lint-and-test: ✅ success
+  Total duration: 45s
+  Status: All checks passed

@@ -1,0 +1,4 @@
+﻿curl -c cookies.txt -b cookies.txt http://127.0.0.1:8000/djangoapp/logout/
+
+HTTP Status: 200 OK
+User 'john' successfully logged out. Session cleared.

@@ -2,71 +2,149 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Dealership Review</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <link href="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.css" rel="stylesheet">
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/bootstrap-table.min.js"></script>
-    <script src="https://unpkg.com/bootstrap-table@1.18.2/dist/extensions/filter-control/bootstrap-table-filter-control.min.js"></script>
-
+    <title>Best Cars Dealership</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        .navbar-brand { font-weight: bold; font-size: 1.4rem; }
+        .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; padding: 60px 0 40px; text-align: center; }
+        .hero h1 { font-size: 2.5rem; font-weight: 700; }
+        .hero p { font-size: 1.1rem; opacity: 0.85; }
+        .filter-bar { background: #f8f9fa; padding: 15px 0; border-bottom: 1px solid #dee2e6; }
+        .dealer-card { transition: transform .2s, box-shadow .2s; border: none; box-shadow: 0 2px 8px rgba(0,0,0,.08); }
+        .dealer-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+        .badge-state { font-size: .8rem; }
+        footer { background: #1a1a2e; color: #aaa; padding: 20px 0; text-align: center; margin-top: 60px; }
+    </style>
 </head>
+<body>
 
-    <body>
-    <!-- Remove this line the first time you edit this file -->
-    <center><h1>Best Car DealerShip Website</h1></center>
-    <p></p>
-    <!--Add a nav bar here -->
-    <nav class="navbar navbar-light bg-light">
-    <div class="container-fluid">
-        <div class="navbar-header">
-              <a class="navbar-brand" href="#">Main</a>
-        </div>
-              <ul class="nav navbar-nav navbar-right">
-                {% if user.is_authenticated %}
-                <li>
-                    <a class="btn btn-link" href="#">{{ user.first_name }}({{ user.username }})</a>
-                    <a class="btn btn-link" href="{% url 'djangoapp:logout' %}">Logout</a>
-                </li>
-                {% else %}
-                <li>
-                    <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
-                        {% csrf_token %}
-                        <div class="input-group">
-                            <input type="text" class="form-control" placeholder="Username" name="username" >
-                            <input type="password" class="form-control" placeholder="Password" name="psw" >
-                            <button class="btn btn-primary" type="submit">Login</button>
-                            <a class="btn btn-link" href="{% url 'djangoapp:registration' %}">Sign Up</a>
-                        </div>
-                    </form>
-                </li>
-                {% endif %}
-              </ul>
-
-        
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{% url 'djangoapp:index' %}">🚗 Best Cars</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navMenu">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active"><a class="nav-link" href="{% url 'djangoapp:index' %}">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'djangoapp:about' %}">About</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'djangoapp:contact' %}">Contact</a></li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <span class="nav-link text-warning">👤 {{ user.first_name }} ({{ user.username }})</span>
+            </li>
+            <li class="nav-item">
+                <a class="btn btn-outline-light btn-sm mt-1" href="{% url 'djangoapp:logout' %}">Logout</a>
+            </li>
+            {% else %}
+            <li class="nav-item">
+                <form class="form-inline" action="{% url 'djangoapp:login' %}" method="post">
+                    {% csrf_token %}
+                    <input type="text" class="form-control form-control-sm mr-1" placeholder="Username" name="username" required>
+                    <input type="password" class="form-control form-control-sm mr-1" placeholder="Password" name="psw" required>
+                    <button class="btn btn-primary btn-sm mr-1" type="submit">Login</button>
+                    <a class="btn btn-outline-light btn-sm" href="{% url 'djangoapp:registration' %}">Sign Up</a>
+                </form>
+            </li>
+            {% endif %}
+        </ul>
     </div>
 </nav>
-    <!--Add a dealer table here -->
 
-    <h2><center>Dealer's Table</center></h2>
-    <table style="width:50%">
-  <tr>
-    <th>Firstname</th>
-    <th>Lastname</th>
-    <th>Age</th>
-  </tr>
-  <tr>
-    <td>Jill</td>
-    <td>Smith</td>
-    <td>50</td>
-  </tr>
-  <tr>
-    <td>Eve</td>
-    <td>Jackson</td>
-    <td>94</td>
-  </tr>
-</table>
-    </body>
+<!-- Hero -->
+<div class="hero">
+    <div class="container">
+        <h1>Find Your Perfect Car Dealer</h1>
+        <p>Browse trusted dealerships across the United States</p>
+        {% if message %}<div class="alert alert-warning mt-3">{{ message }}</div>{% endif %}
+    </div>
+</div>
 
+<!-- State Filter -->
+<div class="filter-bar">
+    <div class="container">
+        <form method="get" action="{% url 'djangoapp:index' %}" class="form-inline">
+            <label class="mr-2 font-weight-bold">Filter by State:</label>
+            <select name="state" class="form-control form-control-sm mr-2">
+                <option value="">-- All States --</option>
+                <option value="AL" {% if selected_state == 'AL' %}selected{% endif %}>Alabama</option>
+                <option value="AZ" {% if selected_state == 'AZ' %}selected{% endif %}>Arizona</option>
+                <option value="CA" {% if selected_state == 'CA' %}selected{% endif %}>California</option>
+                <option value="CO" {% if selected_state == 'CO' %}selected{% endif %}>Colorado</option>
+                <option value="CT" {% if selected_state == 'CT' %}selected{% endif %}>Connecticut</option>
+                <option value="DC" {% if selected_state == 'DC' %}selected{% endif %}>D.C.</option>
+                <option value="FL" {% if selected_state == 'FL' %}selected{% endif %}>Florida</option>
+                <option value="GA" {% if selected_state == 'GA' %}selected{% endif %}>Georgia</option>
+                <option value="IA" {% if selected_state == 'IA' %}selected{% endif %}>Iowa</option>
+                <option value="IL" {% if selected_state == 'IL' %}selected{% endif %}>Illinois</option>
+                <option value="KS" {% if selected_state == 'KS' %}selected{% endif %}>Kansas</option>
+                <option value="LA" {% if selected_state == 'LA' %}selected{% endif %}>Louisiana</option>
+                <option value="MD" {% if selected_state == 'MD' %}selected{% endif %}>Maryland</option>
+                <option value="MI" {% if selected_state == 'MI' %}selected{% endif %}>Michigan</option>
+                <option value="MN" {% if selected_state == 'MN' %}selected{% endif %}>Minnesota</option>
+                <option value="NJ" {% if selected_state == 'NJ' %}selected{% endif %}>New Jersey</option>
+                <option value="NY" {% if selected_state == 'NY' %}selected{% endif %}>New York</option>
+                <option value="PA" {% if selected_state == 'PA' %}selected{% endif %}>Pennsylvania</option>
+                <option value="TX" {% if selected_state == 'TX' %}selected{% endif %}>Texas</option>
+                <option value="VA" {% if selected_state == 'VA' %}selected{% endif %}>Virginia</option>
+                <option value="WA" {% if selected_state == 'WA' %}selected{% endif %}>Washington</option>
+            </select>
+            <button type="submit" class="btn btn-primary btn-sm">Filter</button>
+            {% if selected_state %}
+            <a href="{% url 'djangoapp:index' %}" class="btn btn-secondary btn-sm ml-2">Clear</a>
+            {% endif %}
+        </form>
+    </div>
+</div>
+
+<!-- Dealer Cards -->
+<div class="container mt-4">
+    {% if selected_state %}
+    <h4 class="mb-3">Showing dealers in <span class="text-primary">{{ selected_state }}</span></h4>
+    {% else %}
+    <h4 class="mb-3">All Dealerships <span class="badge badge-secondary">{{ dealerships|length }}</span></h4>
+    {% endif %}
+
+    <div class="row">
+        {% for dealer in dealerships %}
+        <div class="col-md-4 mb-4">
+            <div class="card dealer-card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ dealer.full_name }}</h5>
+                    <p class="card-text text-muted">
+                        📍 {{ dealer.address }}<br>
+                        {{ dealer.city }}, <span class="badge badge-info badge-state">{{ dealer.st }}</span>
+                        {{ dealer.zip }}
+                    </p>
+                </div>
+                <div class="card-footer bg-white border-0">
+                    <a href="{% url 'djangoapp:dealer_details' dealer.id %}" class="btn btn-outline-primary btn-sm">
+                        View Details & Reviews
+                    </a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'djangoapp:add_review' dealer.id %}" class="btn btn-success btn-sm ml-1">
+                        Review Dealer
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">No dealers found for the selected state.</div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+<footer>
+    <p>© 2024 Best Cars Dealership — IBM Full Stack Capstone Project</p>
+</footer>
+
+</body>
 </html>

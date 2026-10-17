@@ -1,15 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-
-    <title>Contact Us</title>
+    <meta charset="UTF-8">
+    <title>Contact Us – Best Cars Dealership</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; }
+        .hero-contact { background: linear-gradient(135deg, #0f3460, #533483); color: white; padding: 60px 0; text-align: center; }
+        .contact-card { border: none; box-shadow: 0 4px 16px rgba(0,0,0,.1); border-radius: 12px; padding: 30px; }
+        .contact-icon { font-size: 2rem; margin-bottom: 10px; }
+        .map-placeholder { background: #e9ecef; height: 280px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; color: #6c757d; }
+        footer { background: #1a1a2e; color: #aaa; padding: 20px 0; text-align: center; margin-top: 60px; }
+    </style>
 </head>
+<body>
 
-    <body>
-        <h3>
-        Contact Us
-        </h3>
-        <p>Phone: 0000000000</p>
-        <p>Address: USA</p>
-    </body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="/djangoapp/">🚗 Best Cars</a>
+    <div class="collapse navbar-collapse">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item"><a class="nav-link" href="/djangoapp/">Home</a></li>
+            <li class="nav-item"><a class="nav-link" href="/djangoapp/about/">About</a></li>
+            <li class="nav-item active"><a class="nav-link" href="/djangoapp/contact/">Contact Us</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Hero -->
+<div class="hero-contact">
+    <div class="container">
+        <h1 class="display-4 font-weight-bold">Contact Us</h1>
+        <p class="lead mt-2">We'd love to hear from you. Reach out anytime.</p>
+    </div>
+</div>
+
+<!-- Contact Info Cards -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-4 mb-4 text-center">
+            <div class="contact-card">
+                <div class="contact-icon">📞</div>
+                <h5 class="font-weight-bold">Phone</h5>
+                <p class="text-muted">Mon – Fri: 8am – 6pm CST</p>
+                <p class="font-weight-bold">+1 (800) 555-0199</p>
+                <p class="text-muted">+1 (312) 555-0145</p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4 text-center">
+            <div class="contact-card">
+                <div class="contact-icon">✉️</div>
+                <h5 class="font-weight-bold">Email</h5>
+                <p class="text-muted">We reply within 24 hours</p>
+                <p><a href="mailto:support@bestcars.com">support@bestcars.com</a></p>
+                <p><a href="mailto:sales@bestcars.com">sales@bestcars.com</a></p>
+            </div>
+        </div>
+        <div class="col-md-4 mb-4 text-center">
+            <div class="contact-card">
+                <div class="contact-icon">📍</div>
+                <h5 class="font-weight-bold">Headquarters</h5>
+                <p class="text-muted">Best Cars Dealership HQ</p>
+                <p class="font-weight-bold">233 N Michigan Ave<br>Chicago, IL 60601<br>United States</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Contact Form + Map -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="contact-card">
+                <h4 class="font-weight-bold mb-4">Send Us a Message</h4>
+                <form>
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" class="form-control" placeholder="Your name">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" class="form-control" placeholder="your@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label>Subject</label>
+                        <input type="text" class="form-control" placeholder="How can we help?">
+                    </div>
+                    <div class="form-group">
+                        <label>Message</label>
+                        <textarea class="form-control" rows="4" placeholder="Write your message here..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Send Message</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-md-6 mb-4">
+            <div class="map-placeholder">
+                🗺️ 233 N Michigan Ave, Chicago, IL 60601
+            </div>
+            <div class="contact-card mt-4">
+                <h5 class="font-weight-bold">Business Hours</h5>
+                <table class="table table-sm table-borderless mt-2">
+                    <tr><td>Monday – Friday</td><td class="font-weight-bold">8:00 AM – 6:00 PM</td></tr>
+                    <tr><td>Saturday</td><td class="font-weight-bold">9:00 AM – 4:00 PM</td></tr>
+                    <tr><td>Sunday</td><td class="text-muted">Closed</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer>
+    <p>© 2024 Best Cars Dealership — IBM Full Stack Capstone Project</p>
+</footer>
+
+</body>
 </html>

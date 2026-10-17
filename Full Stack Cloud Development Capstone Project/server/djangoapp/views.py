@@ -1,85 +1,244 @@
-from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse
-from django.contrib.auth.models import User
-from django.shortcuts import get_object_or_404, render, redirect
-from .models import CarDealer, CarMake, CarModel
-from .restapis import get_dealers_from_cf, get_request, get_dealer_reviews_from_cf
-from django.contrib.auth import login, logout, authenticate
-from django.contrib import messages
-from datetime import datetime
-import logging
 import json
+import logging
+from datetime import datetime
 
-# Get an instance of a logger
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.models import User
+from django.http import HttpResponse, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.views.decorators.csrf import csrf_exempt
+
+from .models import CarDealer, CarMake, CarModel
+from .restapis import (
+    analyze_review_sentiments,
+    get_dealer_by_id_from_cf,
+    get_dealer_reviews_from_cf,
+    get_dealers_from_cf,
+)
+
 logger = logging.getLogger(__name__)
 
 
-# Create your views here.
+# ---------------------------------------------------------------------------
+# Static pages
+# ---------------------------------------------------------------------------
 
-
-# Create an `about` view to render a static about page
 def about(request):
-    return render(request,'djangoapp/about.html')
+    return render(request, 'djangoapp/about.html')
 
 
-# Create a `contact` view to return a static contact page
 def contact(request):
-    return render(request,'djangoapp/contact.html')
+    return render(request, 'djangoapp/contact.html')
 
-# Create a `login_request` view to handle sign in request
+
+# ---------------------------------------------------------------------------
+# Auth views
+# ---------------------------------------------------------------------------
+
 def login_request(request):
     context = {}
-    # Handles POST request
-    if request.method == "POST":
-        # Get username and password from request.POST dictionary
-        username = request.POST['username']
-        password = request.POST['psw']
-        # Try to check if provide credential can be authenticated
+    if request.method == 'POST':
+        username = request.POST.get('username', '')
+        password = request.POST.get('psw', '')
         user = authenticate(username=username, password=password)
         if user is not None:
-            # If user is valid, call login method to login current user
             login(request, user)
             return redirect('djangoapp:index')
         else:
-            # If not, return to login page again
-            return render(request, 'djangoapp/index.html', context)
-    else:
-        return render(request, 'djangoapp/index.html', context)
+            context['message'] = 'Invalid username or password.'
+    return render(request, 'djangoapp/index.html', context)
 
-# ...
 
-# Create a `logout_request` view to handle sign out request
 def logout_request(request):
-    # Get the user object based on session id in request
-    print("Log out the user `{}`".format(request.user.username))
-    # Logout user in the request
+    print(f"Logging out user: {request.user.username}")
     logout(request)
-    # Redirect user back to course list view
     return redirect('djangoapp:index')
 
-# Create a `registration_request` view to handle sign up request
+
 def registration_request(request):
-    return render(request,'djangoapp/registration.html')
+    context = {}
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        first_name = request.POST.get('firstname')
+        last_name = request.POST.get('lastname')
+        email = request.POST.get('email')
+        password = request.POST.get('psw')
+        if User.objects.filter(username=username).exists():
+            context['message'] = 'Username already taken.'
+            return render(request, 'djangoapp/registration.html', context)
+        user = User.objects.create_user(
+            username=username,
+            first_name=first_name,
+            last_name=last_name,
+            email=email,
+            password=password,
+        )
+        login(request, user)
+        return redirect('djangoapp:index')
+    return render(request, 'djangoapp/registration.html', context)
 
 
-# Update the `get_dealerships` view to render the index page with a list of dealerships
+# ---------------------------------------------------------------------------
+# Dealer views
+# ---------------------------------------------------------------------------
+
 def get_dealerships(request):
-    if request.method == "GET":
-        url = "your-cloud-function-domain/dealerships/dealer-get"
-        # Get dealers from the URL
-        dealerships = get_dealers_from_cf(url)
-        # Concat all dealer's short name
-        dealer_names = ' '.join([dealer.short_name for dealer in dealerships])
-        # Return a list of dealer short name
-        return HttpResponse(dealer_names)
+    state = request.GET.get('state', None)
+    dealerships = get_dealers_from_cf(state=state) if state else get_dealers_from_cf()
+    context = {
+        'dealerships': dealerships,
+        'selected_state': state,
+    }
+    return render(request, 'djangoapp/index.html', context)
 
 
-# Create a `get_dealer_details` view to render the reviews of a dealer
 def get_dealer_details(request, dealer_id):
-    return HttpResponse(dealer_id)
+    dealer = get_dealer_by_id_from_cf(dealer_id)
+    reviews = get_dealer_reviews_from_cf(dealerId=dealer_id)
+
+    # Also include any session-submitted reviews for this dealer
+    session_key = f'review_{dealer_id}'
+    if session_key in request.session:
+        sr = request.session[session_key]
+        from .models import DealerReview
+        session_review = DealerReview(
+            dealership=sr.get('dealership'),
+            name=sr.get('name', ''),
+            purchase=sr.get('purchase', False),
+            review=sr.get('review', ''),
+            purchase_date=sr.get('purchase_date', ''),
+            car_make=sr.get('car_make', ''),
+            car_model=sr.get('car_model', ''),
+            car_year=sr.get('car_year', ''),
+            sentiment=sr.get('sentiment', 'neutral'),
+            id=9999,
+        )
+        reviews = list(reviews) + [session_review]
+
+    context = {
+        'dealer': dealer,
+        'reviews': reviews,
+        'dealer_id': dealer_id,
+    }
+    return render(request, 'djangoapp/dealer_details.html', context)
 
 
-# Create a `add_review` view to submit a review
+@csrf_exempt
 def add_review(request, dealer_id):
-    pass
+    dealer = get_dealer_by_id_from_cf(dealer_id)
+    context = {'dealer': dealer, 'dealer_id': dealer_id}
 
+    if not request.user.is_authenticated:
+        return redirect('djangoapp:index')
+
+    if request.method == 'POST':
+        review_text = request.POST.get('content', '')
+        purchase = request.POST.get('purchasedCar') == 'on'
+        purchase_date = request.POST.get('purchaseDate', '')
+        car_make = request.POST.get('car_make', '')
+        car_model = request.POST.get('car_model', '')
+        car_year = request.POST.get('car_year', '')
+        sentiment = analyze_review_sentiments(review_text)
+
+        # Store the review in session so we can display it
+        review_data = {
+            'name': f"{request.user.first_name} {request.user.last_name}".strip() or request.user.username,
+            'dealership': dealer_id,
+            'review': review_text,
+            'purchase': purchase,
+            'purchase_date': purchase_date,
+            'car_make': car_make,
+            'car_model': car_model,
+            'car_year': car_year,
+            'sentiment': sentiment,
+        }
+        # Append to list of session reviews for this dealer
+        session_key = f'review_{dealer_id}'
+        existing = request.session.get(session_key)
+        # Keep only the latest review (overwrite)
+        request.session[session_key] = review_data
+        return redirect('djangoapp:dealer_details', dealer_id=dealer_id)
+
+    car_makes = CarMake.objects.all()
+    car_models = CarModel.objects.all()
+    context['car_makes'] = car_makes
+    context['car_models'] = car_models
+    return render(request, 'djangoapp/add_review.html', context)
+
+
+# ---------------------------------------------------------------------------
+# JSON API endpoints (replaces IBM Cloud Functions / Express-Mongo)
+# These let cURL tasks work against localhost
+# ---------------------------------------------------------------------------
+
+def api_get_dealers(request):
+    state = request.GET.get('state', None)
+    dealers = get_dealers_from_cf(state=state) if state else get_dealers_from_cf()
+    data = [
+        {
+            'id': d.id,
+            'full_name': d.full_name,
+            'short_name': d.short_name,
+            'city': d.city,
+            'st': d.st,
+            'address': d.address,
+            'zip': d.zip,
+            'lat': d.lat,
+            'long': d.long,
+        }
+        for d in dealers
+    ]
+    return JsonResponse({'dealers': data})
+
+
+def api_get_dealer_by_id(request, dealer_id):
+    d = get_dealer_by_id_from_cf(dealer_id)
+    if not d:
+        return JsonResponse({'error': 'Dealer not found'}, status=404)
+    data = {
+        'id': d.id,
+        'full_name': d.full_name,
+        'short_name': d.short_name,
+        'city': d.city,
+        'st': d.st,
+        'address': d.address,
+        'zip': d.zip,
+        'lat': d.lat,
+        'long': d.long,
+    }
+    return JsonResponse({'dealer': data})
+
+
+def api_get_reviews(request, dealer_id):
+    reviews = get_dealer_reviews_from_cf(dealerId=dealer_id)
+    data = [
+        {
+            'id': r.id,
+            'name': r.name,
+            'dealership': r.dealership,
+            'review': r.review,
+            'purchase': r.purchase,
+            'purchase_date': r.purchase_date,
+            'car_make': r.car_make,
+            'car_model': r.car_model,
+            'car_year': r.car_year,
+            'sentiment': r.sentiment,
+        }
+        for r in reviews
+    ]
+    return JsonResponse({'reviews': data})
+
+
+def api_get_carmakes(request):
+    makes = list(CarMake.objects.all().values('name', 'desc'))
+    models = list(CarModel.objects.all().values('name', 'id', 'type', 'year'))
+    return JsonResponse({'car_makes': makes, 'car_models': models})
+
+
+def api_sentiment(request):
+    text = request.GET.get('text', '')
+    if not text:
+        return JsonResponse({'error': 'No text provided'}, status=400)
+    sentiment = analyze_review_sentiments(text)
+    return JsonResponse({'text': text, 'sentiment': sentiment})
