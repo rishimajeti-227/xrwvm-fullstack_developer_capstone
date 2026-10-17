@@ -1,8 +1,6 @@
-﻿curl -c cookies.txt -b cookies.txt -X POST http://127.0.0.1:8000/djangoapp/login/ \
-  -H "X-CSRFToken: TMsakOWgDu3HWODMiytooe2oYItXTIl5" \
-  -H "Referer: http://127.0.0.1:8000/djangoapp/" \
-  -d "username=john&psw=John1234!"
+﻿curl -X POST http://127.0.0.1:8000/djangoapp/login_json \
+  -H "Content-Type: application/json" \
+  -H "X-CSRFToken: 0Wt7G3XQRVJv4oYDXkSdpzWm1EuQW1vH" \
+  -d '{"userName":"john","password":"John1234!"}'
 
-HTTP Status: 200 OK
-Session cookie set: sessionid=c7288wydya3om3wu3qyg2rlp3iub4i16
-User 'john' successfully logged in.
+{"userName": "john", "status": "Authenticated"}

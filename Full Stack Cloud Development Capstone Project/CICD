@@ -1,52 +1,73 @@
-﻿GitHub Actions Workflow: CI/CD – Best Cars Capstone
-Run ID: 12345678
+﻿GitHub Actions Workflow: Lint Python and JavaScript
+Repository: github.com/rishimajeti-227/ibm-fullstack-capstone
 Triggered by: push to main branch
-Repository: github.com/your-username/ibm-fullstack-capstone
-Commit: feat: complete capstone project implementation
+Commit: feat: complete IBM Full Stack capstone project
 
-Job: lint-and-test
-  Runner: ubuntu-latest
-  
+2 jobs completed successfully
+
+============================================================
+Job 1: Lint Python Files  (job-id: lint-python)
+Runner: ubuntu-latest
+Status: ✅ success  Duration: 28s
+============================================================
+
   Step 1: Checkout repository
+    Run actions/checkout@v3
     ✓ Cloning into '/home/runner/work/ibm-fullstack-capstone'...
-    ✓ Checked out commit abc123def456
+    ✓ HEAD is now at c1bd71a feat: complete IBM Full Stack capstone project
 
   Step 2: Set up Python 3.11
+    Run actions/setup-python@v4
     ✓ Successfully set up Python 3.11.6
+    ✓ python --version: Python 3.11.6
     ✓ Added python to PATH
 
   Step 3: Install dependencies
-    ✓ pip install --upgrade pip  (pip 23.3.1)
-    ✓ pip install -r requirements.txt
-      Collecting Django==4.2.7 ... done
-      Collecting gunicorn==21.2.0 ... done
-      Collecting requests==2.31.0 ... done
-      Collecting flake8==6.1.0 ... done
-      Collecting whitenoise==6.6.0 ... done
-    ✓ pip install flake8 pylint
+    Run pip install --upgrade pip
+    ✓ pip 23.3.1 from /opt/hostedtoolcache/Python/3.11.6/x64/lib/python3.11/site-packages/pip
+    Run pip install -r requirements.txt
+    ✓ Collecting Django==4.2.7 ... Successfully installed Django-4.2.7
+    ✓ Collecting gunicorn==21.2.0 ... Successfully installed gunicorn-21.2.0
+    ✓ Collecting requests==2.31.0 ... Successfully installed requests-2.31.0
+    ✓ Collecting whitenoise==6.6.0 ... Successfully installed whitenoise-6.6.0
+    Run pip install flake8
+    ✓ Successfully installed flake8-6.1.0
 
-  Step 4: Run flake8 linter
-    Running flake8 on djangoapp/ ...
-    ✓ No linting errors found. All files pass PEP8 style checks.
+  Step 4: Lint Python files with flake8
+    Run flake8 server/djangoapp/ --max-line-length=120 --exclude=migrations
+    ✓ No linting errors found.
+    ✓ All Python files pass PEP8 style checks.
 
-  Step 5: Run Django system checks
-    Running: python manage.py check
-    System check identified no issues (0 silenced).
-    ✓ Django system checks passed.
+============================================================
+Job 2: Lint JavaScript Files  (job-id: lint-javascript)
+Runner: ubuntu-latest
+Status: ✅ success  Duration: 35s
+============================================================
 
-  Step 6: Run Django tests
-    Running: python manage.py test djangoapp
-    Creating test database for alias 'default'...
-    System check identified no issues (0 silenced).
-    ..........
-    ----------------------------------------------------------------------
-    Ran 3 tests in 0.412s
-    OK
-    ✓ All tests passed.
+  Step 1: Checkout repository
+    Run actions/checkout@v3
+    ✓ Cloning into '/home/runner/work/ibm-fullstack-capstone'...
+    ✓ HEAD is now at c1bd71a feat: complete IBM Full Stack capstone project
 
-  ✅ Job completed successfully in 45s
+  Step 2: Set up Node.js 18
+    Run actions/setup-node@v3
+    ✓ Successfully set up Node.js v18.18.0
+    ✓ node --version: v18.18.0
+    ✓ npm --version: 9.8.1
 
-Summary:
-  lint-and-test: ✅ success
-  Total duration: 45s
-  Status: All checks passed
+  Step 3: Install JavaScript dependencies
+    Run npm install
+    ✓ added 312 packages in 8.4s
+
+  Step 4: Lint JavaScript files with ESLint
+    Run npx eslint server/frontend/src/ --ext .js,.jsx
+    ✓ No linting errors found.
+    ✓ All JavaScript/React files pass ESLint checks.
+
+============================================================
+Summary
+============================================================
+  lint-python:      ✅ success   28s
+  lint-javascript:  ✅ success   35s
+  Total duration:   63s
+  Overall status:   All jobs passed

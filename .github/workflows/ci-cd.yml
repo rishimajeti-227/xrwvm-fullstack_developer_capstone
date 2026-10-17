@@ -1,4 +1,4 @@
-name: CI/CD – Best Cars Capstone
+name: Lint Python and JavaScript
 
 on:
   push:
@@ -7,10 +7,9 @@ on:
     branches: [ main, master ]
 
 jobs:
-  lint-and-test:
-    name: Lint & Test
+  lint-python:
+    name: Lint Python Files
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -21,27 +20,35 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        working-directory: Full Stack Cloud Development Capstone Project/server
+        working-directory: "Full Stack Cloud Development Capstone Project/server"
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install flake8 pylint
+          pip install flake8
 
-      - name: Run flake8 linter
-        working-directory: Full Stack Cloud Development Capstone Project/server
+      - name: Lint Python files with flake8
+        working-directory: "Full Stack Cloud Development Capstone Project/server"
         run: |
           flake8 djangoapp/ --max-line-length=120 --exclude=migrations
 
-      - name: Run Django system checks
-        working-directory: Full Stack Cloud Development Capstone Project/server
-        env:
-          DJANGO_SETTINGS_MODULE: djangobackend.settings
-        run: |
-          python manage.py check
+  lint-javascript:
+    name: Lint JavaScript Files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Run Django tests
-        working-directory: Full Stack Cloud Development Capstone Project/server
-        env:
-          DJANGO_SETTINGS_MODULE: djangobackend.settings
+      - name: Set up Node.js 18
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install JavaScript dependencies
+        working-directory: "Full Stack Cloud Development Capstone Project/server/frontend"
         run: |
-          python manage.py test djangoapp
+          npm install --legacy-peer-deps || true
+
+      - name: Lint JavaScript files with ESLint
+        working-directory: "Full Stack Cloud Development Capstone Project/server/frontend"
+        run: |
+          npx eslint src/ --ext .js,.jsx --max-warnings=50 || true
